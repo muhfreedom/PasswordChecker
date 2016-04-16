@@ -1,0 +1,21 @@
+{{extend 'layout.html'}}
+
+<h1>
+    {{=survey.name}}
+</h1>
+
+<p>
+     {{=survey.passchk_pass}}
+
+</p>
+
+<form method="POST" action="#">
+    {{k=1}}
+    {{for k,choice in enumerate(survey.choices):}}
+   <div class="well">
+
+    <input type="text" name="choice" value="{{=k}}"/> {{=choice}}
+   </div>
+    {{pass}}
+    <input type="submit"/>
+</form>

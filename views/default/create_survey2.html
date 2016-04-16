@@ -1,0 +1,18 @@
+{{extend 'layout.html'}}
+
+
+<form action="#" enctype="multipart/form-data" method="post" name="passchk_form">
+<div class="well">
+<ul>
+  <li>Your password <input name="passchk_pass" /></li>
+  <!--<li><span id="passchk_result">Loading ...</span></li>-->
+  <!--<textarea class="text form-control" cols="40" id="passchk_result" name="entropy" rows="10" style="display:none"></textarea>-->
+  <textarea class="text form-control" cols="5" id="passchk_result" name="entropy" rows="2" style="display:none"></textarea>
+  <textarea class="text form-control" cols="5" id="passchk_result2" name="charset" rows="2" style="display:none"></textarea>
+  <textarea class="text form-control" cols="5" id="passchk_result3" name="lenght" rows="2" style="display:none"></textarea>
+</ul>
+</div>
+  <input type="submit" />
+  <input type="hidden" name="_formname" value="test" />
+
+</form>

@@ -1,0 +1,9 @@
+{{extend 'layout.html'}}
+
+{{if auth.user:}}
+{{=A('Skriv lösenord',_href=URL('create_survey'),_class="btn btn-primary")}}
+{{else:}}
+<div class="well">
+    Välkommen till LösenordQuizet. Klicka på Logga in högst upp i högra hörnet!
+</div>
+{{pass}}
