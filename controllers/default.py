@@ -88,6 +88,9 @@ def phaser5():
 def phaser6():
     return locals()
 
+def phaser7():
+    return locals()
+
 def phaserStates():
     return locals()
 
