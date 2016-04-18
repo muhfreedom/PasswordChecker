@@ -113,28 +113,29 @@ P2Game.Play.prototype = {
         randPass1 = this.game.rnd.pick(passArray1);
         randPass2 = this.game.rnd.pick(passArray2);
 
-         pass1 = game.add.text(380, 280, randPass0, 22);
+         pass1 = game.add.text(350, 280, randPass0, 22);
          pass1.inputEnabled = true;
          pass1.input.enableDrag();
 
-         pass2 = game.add.text(380, 312, randPass1, 22);
+         pass2 = game.add.text(350, 312, randPass1, 22);
          pass2.inputEnabled = true;
          pass2.input.enableDrag();
 
-         pass3 = game.add.text(380, 340, randPass2, 22);
+         pass3 = game.add.text(350, 340, randPass2, 22);
          pass3.inputEnabled = true;
          pass3.input.enableDrag();
 
-         spriteDrop = game.add.bitmapText(380, 420, 'nokia16black','Drop Here!' );
+         spriteDrop = game.add.bitmapText(350, 420, 'nokia16black','Drop Here!' );
 
          //restart button, just restarts the play state
-         this.button = game.add.button(590,405, 'button', this.actionOnClick, this, width = 40, height=25);
+         this.button = game.add.button(600,300, 'button', this.actionOnClick, this, width = 40, height=25);
 
-         resultat = game.add.text(350, 530, 'Drag the sprites. Overlapping: false', { fill: '#ffffff' });
+         resultat = game.add.text(320, 530, 'Drag the sprites. Overlapping: false', { fill: '#ffffff' });
     },
 
     actionOnClick : function () {
         this.state.start('Play');
+
     },
 /*
    Code underneath is mostly from rumpking passwordchecker.
@@ -293,7 +294,7 @@ charSetSize2: function (randPass2)
     if (checkOverlap(pass1, spriteDrop))
     {
         resultat.text= 'Resultat: ' +(Math.round(bits * 10) / 10);
-        pass1.input.draggable = false;
+        pass1.input.draggable = true;
         pass1.position.copyFrom(spriteDrop.position);
         spriteDrop.alpha = 0;
 
@@ -302,7 +303,7 @@ charSetSize2: function (randPass2)
     else if (checkOverlap(pass2, spriteDrop))
     {
         resultat.text = 'Resultat: ' +(Math.round(bits1 * 10) / 10);
-        pass2.input.draggable = false;
+        pass2.input.draggable = true;
         pass2.position.copyFrom(spriteDrop.position);
         spriteDrop.alpha = 0;
 
@@ -311,13 +312,14 @@ charSetSize2: function (randPass2)
     else if (checkOverlap(pass3, spriteDrop))
     {
         resultat.text = 'Resultat: ' +(Math.round(bits2 * 10) / 10);
-        pass3.input.draggable = false;
+        pass3.input.draggable = true;
         pass3.position.copyFrom(spriteDrop.position);
         spriteDrop.alpha = 0;
 
     }
     else
     {
+        spriteDrop.alpha = 1;
         resultat.text = 'Resultat visas här';
     }
 
