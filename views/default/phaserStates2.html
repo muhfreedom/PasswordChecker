@@ -16,6 +16,7 @@ P2Game.Start.prototype = {
     preload: function () {
 
         this.game.load.image('bg', '{{=URL('static','images/skies/deepblue2.png')}}');
+        this.game.load.image('button', '{{=URL('static','images/buttons/tryagain2.png')}}');
         this.game.load.bitmapFont('nokia16black', '{{=URL('static','images/fonts/bitmapFonts/nokia16black.png')}}','{{=URL('static','images/fonts/bitmapFonts/nokia16black.xml')}}');
 
     },
@@ -85,6 +86,7 @@ P2Game.Play.prototype = {
         style = { font: "18px Arial", fill: "#ffffff", align: "left"};
         this.t = game.add.text(game.world.centerX-350,122, this.infotext, style);
 
+
         /*
            Randomgenerator of passwords,using phaser.js built in method for Math.random
            Insert passwords in the variable passArray0-2
@@ -111,28 +113,29 @@ P2Game.Play.prototype = {
         randPass1 = this.game.rnd.pick(passArray1);
         randPass2 = this.game.rnd.pick(passArray2);
 
-         //pass1 = game.add.bitmapText(532, 280, 'nokia16black', randPass0, 22);
-         pass1 = game.add.text(532, 280, randPass0, 22);
-         //pass1 = game.add.text(450, 280, chars, 22);
+         pass1 = game.add.text(380, 280, randPass0, 22);
          pass1.inputEnabled = true;
          pass1.input.enableDrag();
 
-         pass2 = game.add.text(532, 312, randPass1, 22);
+         pass2 = game.add.text(380, 312, randPass1, 22);
          pass2.inputEnabled = true;
          pass2.input.enableDrag();
 
-         pass3 = game.add.text(532, 340, randPass2, 22);
+         pass3 = game.add.text(380, 340, randPass2, 22);
          pass3.inputEnabled = true;
          pass3.input.enableDrag();
 
-         spriteDrop = game.add.bitmapText(532, 420, 'nokia16black','Drop Here!');
-         //spriteDrop.inputEnabled = true;
-         //spriteDrop.input.enableDrag();
-         //We don't want this to move
+         spriteDrop = game.add.bitmapText(380, 420, 'nokia16black','Drop Here!' );
 
-         text = game.add.text(16, 560, 'Drag the sprites. Overlapping: false', { fill: '#ffffff' });
+         //restart button, just restarts the play state
+         this.button = game.add.button(590,405, 'button', this.actionOnClick, this, width = 40, height=25);
+
+         resultat = game.add.text(350, 530, 'Drag the sprites. Overlapping: false', { fill: '#ffffff' });
     },
 
+    actionOnClick : function () {
+        this.state.start('Play');
+    },
 /*
    Code underneath is mostly from rumpking passwordchecker.
    charsetSize function calculates the passwords charset.
@@ -237,7 +240,7 @@ charSetSize2: function (randPass2)
     aidx = bidx;
    }
 
-   //part2
+   //part2 for randPass1
 
    if (randPass1.length < 1) return 0;
    var c1, aidx1 = 0, bits1 = 0, charSet1, plower1;
@@ -261,7 +264,7 @@ charSetSize2: function (randPass2)
     bits1 += charSet1 * c1 * c1;  // Squared = assmume they are good guessers
     aidx1 = bidx;
    }
-//part3
+   //part3 for randPass2
 
    if (randPass2.length < 1) return 0;
    var c2, aidx2 = 0, bits2 = 0, charSet2, plower2;
@@ -286,24 +289,36 @@ charSetSize2: function (randPass2)
     aidx2 = bidx;
    }
 
+    //when randPass0-2 overlaps spriteDrop, bits are shown in result text
     if (checkOverlap(pass1, spriteDrop))
     {
-        text.text= 'Resultat: ' +(Math.round(bits * 10) / 10);
+        resultat.text= 'Resultat: ' +(Math.round(bits * 10) / 10);
+        pass1.input.draggable = false;
+        pass1.position.copyFrom(spriteDrop.position);
+        spriteDrop.alpha = 0;
+
 
     }
     else if (checkOverlap(pass2, spriteDrop))
     {
-        text.text = 'Resultat: ' +(Math.round(bits1 * 10) / 10);
+        resultat.text = 'Resultat: ' +(Math.round(bits1 * 10) / 10);
+        pass2.input.draggable = false;
+        pass2.position.copyFrom(spriteDrop.position);
+        spriteDrop.alpha = 0;
+
 
     }
     else if (checkOverlap(pass3, spriteDrop))
     {
-        text.text = 'Resultat: ' +(Math.round(bits2 * 10) / 10);
+        resultat.text = 'Resultat: ' +(Math.round(bits2 * 10) / 10);
+        pass3.input.draggable = false;
+        pass3.position.copyFrom(spriteDrop.position);
+        spriteDrop.alpha = 0;
 
     }
     else
     {
-        text.text = 'Resultat visas här';
+        resultat.text = 'Resultat visas här';
     }
 
 
