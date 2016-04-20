@@ -17,6 +17,7 @@ P2Game.Start.prototype = {
 
         this.game.load.image('bg', '{{=URL('static','images/skies/deepblue2.png')}}');
         this.game.load.image('button', '{{=URL('static','images/buttons/tryagain2.png')}}');
+        this.game.load.image('next', '{{=URL('static','images/buttons/next.png')}}');
         this.game.load.bitmapFont('nokia16black', '{{=URL('static','images/fonts/bitmapFonts/nokia16black.png')}}','{{=URL('static','images/fonts/bitmapFonts/nokia16black.xml')}}');
 
     },
@@ -39,19 +40,26 @@ P2Game.Start.prototype = {
                   + "desto säkrare är lösenordet.\n\n Mer bits = Säkrare lösenord"
                   + "\n\nDu ska nu med hjälp av en lösenordstestare testa och se vilket lösenord som har\n"
                   + "högst entropi och därefter välja det lösenordet som har högst entropi."
-                  + "\n\nTryck på Space tangenten för att gå vidare";
+                  + "\n\nTryck på pilen för att gå vidare";
     style = { font: "18px Arial", fill: "#ffffff", align: "left"};
     this.t = game.add.text(game.world.centerX-350,122, this.infotext, style);
+    this.next = game.add.button(900,530, 'next', this.next, this, width = 40, height=25);
 
 
-    this.spacekey = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-    this.spacekey.onDown.addOnce(this.start, this);
+    //this.spacekey = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+    //this.spacekey.onDown.addOnce(this.start, this);
 
     },
 
+    next: function () {
+        game.state.start('Play')
+
+    },
+
+/*
     start: function () {
         game.state.start('Play')
-    },
+    },*/
 };
 
 //  State Play
@@ -115,7 +123,8 @@ P2Game.Play.prototype = {
 
          pass1 = game.add.text(350, 280, randPass0, 22);
          pass1.inputEnabled = true;
-         pass1.input.enableDrag();
+         //pass1.input.enableDrag();
+         pass1.input.draggable = true;
 
          pass2 = game.add.text(350, 312, randPass1, 22);
          pass2.inputEnabled = true;
@@ -129,12 +138,18 @@ P2Game.Play.prototype = {
 
          //restart button, just restarts the play state
          this.button = game.add.button(600,300, 'button', this.actionOnClick, this, width = 40, height=25);
+         this.next = game.add.button(900,530, 'next', this.next2, this, width = 40, height=25);
 
          resultat = game.add.text(320, 530, 'Drag the sprites. Overlapping: false', { fill: '#ffffff' });
     },
 
     actionOnClick : function () {
         this.state.start('Play');
+
+    },
+
+    next2 : function () {
+        this.state.start('Play2');
 
     },
 /*
@@ -294,7 +309,7 @@ charSetSize2: function (randPass2)
     if (checkOverlap(pass1, spriteDrop))
     {
         resultat.text= 'Resultat: ' +(Math.round(bits * 10) / 10);
-        pass1.input.draggable = true;
+        //pass1.input.draggable = true;
         pass1.position.copyFrom(spriteDrop.position);
         spriteDrop.alpha = 0;
 
@@ -303,7 +318,7 @@ charSetSize2: function (randPass2)
     else if (checkOverlap(pass2, spriteDrop))
     {
         resultat.text = 'Resultat: ' +(Math.round(bits1 * 10) / 10);
-        pass2.input.draggable = true;
+        //pass2.input.draggable = true;
         pass2.position.copyFrom(spriteDrop.position);
         spriteDrop.alpha = 0;
 
@@ -312,7 +327,7 @@ charSetSize2: function (randPass2)
     else if (checkOverlap(pass3, spriteDrop))
     {
         resultat.text = 'Resultat: ' +(Math.round(bits2 * 10) / 10);
-        pass3.input.draggable = true;
+        //pass3.input.draggable = true;
         pass3.position.copyFrom(spriteDrop.position);
         spriteDrop.alpha = 0;
 
@@ -328,6 +343,272 @@ charSetSize2: function (randPass2)
 }
 };
 
+// State Play2
+P2Game.Play2 = function (game) {
+//Nothing needed here
+};
+
+P2Game.Play2.prototype = {
+
+
+    create: function () {
+    this.game.add.image(0,0, 'bg');
+
+    this.bar = game.add.graphics();
+    this.bar.beginFill(0x000000, 0.2);
+    this.bar.drawRect(0, 0, 1000, 100);
+    style = {font: "bold 32px Arial", fill: "#ffffff", boundsAlignH: "center",
+    boundsAlignV: "middle"};
+    this.bartext = game.add.text(0,0, "Vilket lösenord är säkrast?", style);//The text is positioned at 0, 0 aka the top
+    this.bartext.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
+    this.bartext.setTextBounds(0, 0, 1000, 100);//set the bounds to be from x0, y0 and be 800px wide by 100px high
+    //this.infotext = "Hej,\nBajs på dig!";
+    style = { font: "18px Arial", fill: "#ffffff", align: "left"};
+    this.t = game.add.text(game.world.centerX-350,122, this.infotext, style);
+
+
+
+    var passArray0 = [
+             'Bajs123',
+             'qwerty!',
+             'LETMEINFFS',
+             'p4s5w0rd!',
+             '#¤horsie!'];
+    var passArray1 = [
+             '123qwerty',
+             'Dvo0rak',
+             'rJHK?ka',
+             '20kEE$rAnd!',
+             'p3n1s'];
+     var passArray2 = [
+            '!Panda',
+            '?qwerty!',
+            '!L3TMEINFFS09',
+            'päs55w0rd!',
+            'Nu;aäbh'];
+
+         randPass0 = this.game.rnd.pick(passArray0);
+         randPass1 = this.game.rnd.pick(passArray1);
+         randPass2 = this.game.rnd.pick(passArray2);
+
+         pass1 = game.add.text(330, 180, randPass0, 22);
+         pass1.inputEnabled = true;
+         pass1.input.useHandCursor = true;
+
+         pass2 = game.add.text(330, 242, randPass1, 22);
+         pass2.inputEnabled = true;
+         pass2.input.useHandCursor = true;
+
+         pass3 = game.add.text(330, 305, randPass2, 22);
+         pass3.inputEnabled = true;
+         pass3.input.useHandCursor = true;
+
+         this.button = game.add.button(600,210, 'button', this.actionOnClick, this, width = 40, height=25);
+
+         resultat = game.add.text(280, 430, '', { fill: '#ffffff' });
+
+    },
+
+    actionOnClick: function () {
+        this.game.state.start('Play2')
+    },
+
+charSetSize: function (randPass0)
+{
+   var charset = new Array( /[0-9]/,
+             /[a-z]/,
+             /[A-Z]/,
+                             /[!@#\$%\^&\*\(\)]/,
+                             /[\x22\x27\x2b\x2c\x2d\x2e\x2f\x3a\x3b\x3c\x3d\x3e\x3f\x5b\x5c\x5d\x5f\x96\x7b\x7c\x7d\x7e]/,
+                             /[\x20]/,
+                             /[^\x20-\x7e]+/
+                   );
+   var charsetsize = new Array(10, 26, 26, 10, 22, 1, 32 + 128);
+   var chars = 0;
+
+   for(var i = 0; i < charset.length; i++)
+       if (charset[i].test(randPass0)) chars += charsetsize[i];
+
+   return chars;
+},
+
+charSetSize1: function (randPass1)
+{
+   var charset1 = new Array( /[0-9]/,
+             /[a-z]/,
+             /[A-Z]/,
+                             /[!@#\$%\^&\*\(\)]/,
+                             /[\x22\x27\x2b\x2c\x2d\x2e\x2f\x3a\x3b\x3c\x3d\x3e\x3f\x5b\x5c\x5d\x5f\x96\x7b\x7c\x7d\x7e]/,
+                             /[\x20]/,
+                             /[^\x20-\x7e]+/
+                   );
+   var charset1size = new Array(10, 26, 26, 10, 22, 1, 32 + 128);
+   var chars1 = 0;
+
+   for(var i = 0; i < charset1.length; i++)
+       if (charset1[i].test(randPass1)) chars1 += charset1size[i];
+
+   return chars1;
+},
+
+charSetSize2: function (randPass2)
+{
+   var charset2 = new Array( /[0-9]/,
+             /[a-z]/,
+             /[A-Z]/,
+                             /[!@#\$%\^&\*\(\)]/,
+                             /[\x22\x27\x2b\x2c\x2d\x2e\x2f\x3a\x3b\x3c\x3d\x3e\x3f\x5b\x5c\x5d\x5f\x96\x7b\x7c\x7d\x7e]/,
+                             /[\x20]/,
+                             /[^\x20-\x7e]+/
+                   );
+   var charset2size = new Array(10, 26, 26, 10, 22, 1, 32 + 128);
+   var chars2 = 0;
+
+   for(var i = 0; i < charset2.length; i++)
+       if (charset2[i].test(randPass2)) chars2 += charset2size[i];
+
+   return chars2;
+},
+
+ getIndex: function (c) {
+   c = c.charAt(0).toLowerCase();
+   if (c < 'a' || c > 'z') return 0;
+   return c.charCodeAt(0) - 'a'.charCodeAt(0) + 1;
+},
+
+
+/*
+    function update belongs to phaser.js framework
+    it runs several times during the game to check collision, overlaps etc.
+    Rumkin Password StrenghtChecker code runs here since it does not work
+    as a stand alone function like the rest with phaser.
+    Don't know why, don't care. Pray to Satan for knowledge.
+*/
+
+    update: function () {
+
+
+   if (randPass0.length < 1) return 0;
+   var c, aidx = 0, bits = 0, charSet, plower;
+
+
+   // calculate number of bits of entrop per char for this
+   // password, based on its charset size
+   charSet = Math.log(this.charSetSize(randPass0)) / Math.log(2);
+
+   // calc number of bits of entropy for first char
+   bits = Math.log(this.charSetSize(randPass0.charAt(0))) / Math.log(2);
+   if (randPass0.length == 1) return bits;
+
+   plower = randPass0.toLowerCase();
+   aidx = this.getIndex(plower.charAt(0));
+
+   for (var b = 1; b < plower.length; b ++)
+   {
+    var bidx = this.getIndex(plower.charAt(b));
+    c = 1.0 - Frequency_Table[aidx * 27 + bidx];
+    bits += charSet * c * c;  // Squared = assmume they are good guessers
+    aidx = bidx;
+   }
+
+   //part2 for randPass1
+
+   if (randPass1.length < 1) return 0;
+   var c1, aidx1 = 0, bits1 = 0, charSet1, plower1;
+
+
+   // calculate number of bits of entrop per char for this
+   // password, based on its charset size
+   charSet1 = Math.log(this.charSetSize1(randPass1)) / Math.log(2);
+
+   // calc number of bits of entropy for first char
+   bits1 = Math.log(this.charSetSize1(randPass1.charAt(0))) / Math.log(2);
+   if (randPass1.length == 1) return bits1;
+
+   plower1 = randPass1.toLowerCase();
+   aidx1 = this.getIndex(plower1.charAt(0));
+
+   for (var b = 1; b < plower1.length; b ++)
+   {
+    var bidx = this.getIndex(plower1.charAt(b));
+    c1 = 1.0 - Frequency_Table[aidx1 * 27 + bidx];
+    bits1 += charSet1 * c1 * c1;  // Squared = assmume they are good guessers
+    aidx1 = bidx;
+   }
+   //part3 for randPass2
+
+   if (randPass2.length < 1) return 0;
+   var c2, aidx2 = 0, bits2 = 0, charSet2, plower2;
+
+
+   // calculate number of bits of entrop per char for this
+   // password, based on its charset size
+   charSet2 = Math.log(this.charSetSize2(randPass2)) / Math.log(2);
+
+   // calc number of bits of entropy for first char
+   bits2 = Math.log(this.charSetSize2(randPass2.charAt(0))) / Math.log(2);
+   if (randPass2.length == 1) return bits;
+
+   plower2 = randPass2.toLowerCase();
+   aidx2 = this.getIndex(plower2.charAt(0));
+
+   for (var b = 1; b < plower2.length; b ++)
+   {
+    var bidx = this.getIndex(plower2.charAt(b));
+    c2 = 1.0 - Frequency_Table[aidx2 * 27 + bidx];
+    bits2 += charSet2 * c2 * c2;  // Squared = assmume they are good guessers
+    aidx2 = bidx;
+   }
+
+    pass1.events.onInputDown.add(down1, this);
+    pass2.events.onInputDown.add(down2, this);
+    pass3.events.onInputDown.add(down3, this);
+
+
+    function down1() {
+        if ((bits > bits1) && (bits > bits2))
+        {
+            resultat.text = "Lösenordet du valde har högst bits!\nResultat:" +(Math.round(bits * 10) / 10)+ "bits" ;
+
+        }
+        else
+        {
+            resultat.text = "Lösenordet du valde har \ntyvärr inte högst bits.\nTesta igen!";
+
+        }
+    }
+
+    function down2() {
+        if ((bits1 > bits) && (bits1 > bits2))
+        {
+            resultat.text = "Lösenordet du valde har högst bits!\nResultat:" +(Math.round(bits1 * 10) / 10)+ "bits" ;
+
+        }
+        else
+        {
+            resultat.text = "Lösenordet du valde har \ntyvärr inte högst bits.\nTesta igen!";
+
+        }
+
+    }
+     function down3() {
+        if ((bits2 > bits) && (bits2 > bits1))
+        {
+            resultat.text = "Lösenordet du valde har högst bits!\nResultat:" +(Math.round(bits2 * 10) / 10)+ "bits" ;
+
+        }
+        else
+        {
+            resultat.text = "Lösenordet du valde har \ntyvärr inte högst bits.\nTesta igen!";
+
+        }
+
+    }
+
+}
+};
+
+
 var game = new Phaser.Game(1000, 600, Phaser.CANVAS, 'phaser-example');
 
 //function checkOverlap needs to be outside game.state to be able to work
@@ -342,6 +623,7 @@ function checkOverlap (spriteA, spriteB) {
 
 game.state.add('Start', P2Game.Start);
 game.state.add('Play', P2Game.Play);
+game.state.add('Play2', P2Game.Play2);
 
 game.state.start('Start');
 
