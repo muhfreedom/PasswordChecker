@@ -71,32 +71,9 @@ def thank_you():
     return dict()
 
 #Phaser.js
-def phaser2():
+@auth.requires_login()
+def Game():
     return locals()
-def phaser():
-    return locals()
-
-def phaser3():
-    return locals()
-
-def phaser4():
-    return locals()
-
-def phaser5():
-    return locals()
-
-def phaser6():
-    return locals()
-
-def phaser7():
-    return locals()
-
-def phaserStates():
-    return locals()
-
-def phaserStates2():
-    return locals()
-
 
 def user():
 

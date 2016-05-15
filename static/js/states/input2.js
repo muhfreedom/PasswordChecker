@@ -1,7 +1,3 @@
-{{extend 'layout.html'}}
-
-
-<script type="text/javascript">
 var game = new Phaser.Game(800, 768, Phaser.CANVAS, '', {
   init: function(){
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -12,24 +8,12 @@ var game = new Phaser.Game(800, 768, Phaser.CANVAS, '', {
     this.scale.updateLayout();
   },
   create: function(){
-
+    
     this.myInput = this.createInput(this.game.world.centerX, 50);
     this.myInput.anchor.set(0.5);
     this.myInput.canvasInput.value('Esto es la verga! :D');
     this.myInput.canvasInput.focus();
-
-    //this.game.add.tween(this.myInput).to({ y: 600 }, 6000, Phaser.Easing.Quadratic.InOut, true, 0, 1000, true);
-
-    this.myInput2 = this.createInput(550, 400);
-    this.myInput2.anchor.set(0.5);
-    this.myInput2.angle = 0;
-    this.myInput2.canvasInput.value('Woww, lo necesitabamos!');
-    //this.game.add.tween(this.myInput2).to({angle:'+360'}, 4000, Phaser.Easing.Cubic.In, true, 2000, -1);
-
-    this.myInput3 = this.createInput(200, 200);
-    this.myInput3.anchor.set(0.5);
-    this.myInput3.angle = 0;
-    this.myInput3.canvasInput.value('Phaser Framework! Niceee');
+    
   },
   render: function(){
     //this.game.debug.spriteBounds(this.myInput);
@@ -38,9 +22,9 @@ var game = new Phaser.Game(800, 768, Phaser.CANVAS, '', {
     sprite.canvasInput.focus();
   },
   createInput: function(x, y){
-    var bmd = this.add.bitmapData(400, 50);
+    var bmd = this.add.bitmapData(400, 50);    
     var myInput = this.game.add.sprite(x, y, bmd);
-
+    
     myInput.canvasInput = new CanvasInput({
       canvas: bmd.canvas,
       fontSize: 30,
@@ -57,11 +41,9 @@ var game = new Phaser.Game(800, 768, Phaser.CANVAS, '', {
       placeHolder: 'Enter message here...'
     });
     myInput.inputEnabled = true;
-    myInput.input.useHandCursor = true;
+    myInput.input.useHandCursor = true;    
     myInput.events.onInputUp.add(this.inputFocus, this);
-
+    
     return myInput;
   }
 });
-
-</script>
